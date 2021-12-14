@@ -39,14 +39,15 @@ public:
 	int GetStamina() { return _stamina; }
 
 	void AddExp(int expGain) { _exp += expGain; }
-	int DealDamage();
+	void DealDamage(APlayerCharacter target, int movePower, bool isMeleeAttack);
 	void TakeDamage(int oncomingDamage);
-	void StatChange(int statStage, int statChanged);
+	void StatChange(int statStage, int statChanged, int whichStat);
 
 private:
 	void DetermineStats();
 
 private:
+	bool _ableToFight = true;
 	int _level;
 	int _exp;
 
@@ -70,5 +71,8 @@ private:
 	int _battleMDefense;
 	int _battleRDefense;
 
-	int _statStage;
+	int _mAtkStage;
+	int _rAtkStage;
+	int _mDefStage;
+	int _RDefStage;
 };

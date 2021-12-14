@@ -52,32 +52,61 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
-int APlayerCharacter::DealDamage()
+void APlayerCharacter::DealDamage(APlayerCharacter target, int movePower, bool isMeleeAttack)
 {
-	return 0;
+	int totalDamage;
+	float attackPortion;
+	float defensePortion;
+
+	switch (isMeleeAttack)
+	{
+	case true:
+		attackPortion = _battleMAttack + (movePower * (1 + (0.03 * _level)));
+		defensePortion = target.GetMDefense() * (1 + (0.03 * target.GetLevel()));
+		totalDamage = (attackPortion * attackPortion) / (defensePortion * 3);
+		break;
+	case false:
+		attackPortion = _battleRAttack + (movePower * (1 + (0.03 * _level)));
+		defensePortion = target.GetRDefense() * (1 + (0.03 * target.GetLevel()));
+		totalDamage = (attackPortion * attackPortion) / (defensePortion * 3);
+		break;
+	}
+
+	target.TakeDamage(totalDamage);
 }
 
 void APlayerCharacter::TakeDamage(int oncomingDamage)
 {
 	_health -= oncomingDamage;
 
-	if (_health < 0)
+	if (_health <= 0)
+	{
 		_health = 0;
+		_ableToFight = false;
+	}
 }
 
-void APlayerCharacter::StatChange(int statStage, int statChanged)
+void APlayerCharacter::StatChange(int statStage, int statChanged, int whichStat)
 {
+	/* Gotta totally rework this
+	int _statStage = statChanged;
 	_statStage += statStage;
+
+
 	if (_statStage < -3)
 	{ 
-		_statStage = -3;
+		statChanged = -3;
 	}
 	else if (_statStage > 3)
 	{
-		_statStage = 3;
+		statChanged = 3;
+	}
+	else
+	{
+		statChanged = _statStage;
 	}
 
-	switch (_statStage)
+	switch (statChanged)
 	{
 	case -3: 
 		statChanged *= 0.25;
@@ -101,11 +130,12 @@ void APlayerCharacter::StatChange(int statStage, int statChanged)
 		statChanged *= 2;
 		break;
 	}
+	*/
 }
 
 void APlayerCharacter::DetermineStats()
 {
-	_health = (0.05 * (3 * _baseHealth * _level)) + (_level * 2) + 20;
+	_health = (0.05 * (3 * _baseHealth * _level)) + (_level * (1 + (0.01 * _level))) + 20;
 	_maxHealth = _health;
 	_mAttack = (0.05 * (3 * _baseMAttack * _level)) + 10;
 	_rAttack = (0.05 * (3 * _baseRAttack * _level)) + 10;
