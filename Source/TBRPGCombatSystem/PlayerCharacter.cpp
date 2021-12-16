@@ -243,6 +243,45 @@ void APlayerCharacter::ResetStats()
 }
 
 
+
+void APlayerCharacter::UseMove(UAttackMoves attackMove, APlayerCharacter target)
+{
+	int attackType = attackMove.GetMoveType();
+	bool isSTAB;
+	int effectiveness = 0;
+
+	if (elementalType[0] == attackType || elementalType[1] == attackType)
+	{
+		isSTAB = true;
+	}
+
+	/*
+		if (attackType is strong against target.GetTypeOne() 
+		&& attackType is strong against target.GetTypeTwo())
+		{
+			effectiveness = 2;
+		}
+		else if (attackType is strong against target.GetTypeOne() 
+		|| attackType is strong against target.GetTypeTwo())
+		{
+			effectiveness = 1;
+		}
+		else if (attackType is weak against target.GetTypeOne()
+		&& attackType is weak against target.GetTypeTwo())
+		{
+			effectiveness = -2;
+		}
+		else if (attackType is weak against target.GetTypeOne()
+		|| attackType is weak against target.GetTypeTwo())
+		{
+			effectiveness = -1;
+		}
+	*/
+
+	DealDamage(target, attackMove.GetPower(), attackMove.GetIsMelee(), isSTAB, effectiveness);
+}
+
+
 /*
 	Takes no arguments.
 
@@ -252,51 +291,38 @@ void APlayerCharacter::AnnoyedAffliction()
 {
 	affliction = 1;
 }
-
-void APlayerCharacter::UseMove(UAttackMoves attackMove)
-{
-}
-
 void APlayerCharacter::BleedingAffliction()
 {
 	affliction = 2;
 }
-
 void APlayerCharacter::BurnAffliction()
 {
 	affliction = 3;
 }
-
 void APlayerCharacter::CorruptedAffliction()
 {
 	affliction = 4;
 }
-
 void APlayerCharacter::FlashburnAffliction()
 {
 	affliction = 5;
 }
-
 void APlayerCharacter::FracturedAffliction()
 {
 	affliction = 6;
 }
-
 void APlayerCharacter::FreezeAffliction()
 {
 	affliction = 7;
 }
-
 void APlayerCharacter::SleepAffliction()
 {
 	affliction = 8;
 }
-
 void APlayerCharacter::StunAffliction()
 {
 	affliction = 9;
 }
-
 void APlayerCharacter::TerrorAffliction()
 {
 	affliction = 10;
@@ -427,4 +453,140 @@ void APlayerCharacter::StatusCheck()
 		_staminaLock = false;
 		break;
 	}
+}
+
+
+int APlayerCharacter::TypeCheck(int attackType, int defenseType)
+{
+	switch (attackType)
+	{
+	case -1:
+		return 0;
+		break;
+		//Aqua attacking
+	case 0:
+		switch (defenseType)
+		{
+		case 0:
+			//Aqua v Aqua, not effective
+			return -1;
+			break;
+		case 2:
+			//Aqua v Corruption, not effective
+			return -1;
+			break;
+		case 4:
+			//Aqua v Earth, very effective
+			return 1;
+			break;
+		case 5:
+			//Aqua v Energy, not effective
+			return -1;
+			break;
+		case 6:
+			//Aqua v Flame, very effective
+			return 1;
+			break;
+		case 7:
+			//Aqua v Frost, not effective
+			return -1;
+			break;
+		case 10:
+			//Aqua v Metal, very effective
+			return 1;
+			break;
+		case 11:
+			//Aqua v Nature, very effective
+			return 1;
+			break;
+		}
+		return 0;
+		break;
+
+		//Beast attacking
+	case 1:
+		switch (defenseType)
+		{
+		case 1:
+			return 1;
+			break;
+		case 2:
+			return -1;
+			break;
+		case 10:
+			return -1;
+			break;
+		case 13:
+			return 1;
+			break;
+		}
+		return 0;
+		break;
+
+		//Corruption attacking
+	case 2:
+		return 0;
+		break;
+
+		//Crystal attacking
+	case 3:
+		return 0;
+		break;
+
+		//Earth attacking
+	case 4:
+		return 0;
+		break;
+
+		//Energy attacking
+	case 5:
+		return 0;
+		break;
+
+		//Flame attacking
+	case 6:
+		return 0;
+		break;
+
+		//Frost attacking
+	case 7:
+		return 0;
+		break;
+
+		//Insect attacking
+	case 8:
+		return 0;
+		break;
+
+		//Light attacking
+	case 9:
+		return 0;
+		break;
+
+		//Metal attacking
+	case 10:
+		return 0;
+		break;
+
+		//Nature attacking
+	case 11:
+		return 0;
+		break;
+
+		//Shadow attacking
+	case 12:
+		return 0;
+		break;
+
+		//Spirit attacking
+	case 13:
+		return 0;
+		break;
+
+		//Wind attacking
+	case 14:
+		return 0;
+		break;
+	}
+	return 0;
 }

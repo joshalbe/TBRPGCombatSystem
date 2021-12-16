@@ -26,6 +26,12 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+public:
+	int GetPower() { return _movePower; }
+	int GetStamCost() {	return _staminaCost; }
+	int GetMoveType() { return _moveType; }
+	bool GetIsMelee() { return _isMelee; }
+
 private:
 	int _movePower;
 	int _staminaCost;

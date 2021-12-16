@@ -42,6 +42,9 @@ public:
 	int GetSpeed() { return _baseSpeed; }
 	int GetStamina() { return _stamina; }
 
+	int GetTypeOne() { return elementalType[0]; }
+	int GetTypeTwo() { return elementalType[1]; }
+
 	void AddExp(int expGain) { _exp += expGain; }
 	void DealDamage(APlayerCharacter target, int movePower, bool isMeleeAttack, 
 		bool isSTAB, int effectiveness);
@@ -61,6 +64,8 @@ public:
 	void AnnoyedAffliction();
 
 	void UseMove(UAttackMoves attackMove, APlayerCharacter target);
+
+	int TypeCheck(int attackType, int defenseType);
 
 private:
 	void LevelUp(int levelsGained);
