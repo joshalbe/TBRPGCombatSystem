@@ -52,11 +52,26 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
-void APlayerCharacter::DealDamage(APlayerCharacter target, int movePower, bool isMeleeAttack)
+
+/*
+	Takes 5 arguments:
+	target- the PlayerCharacter that is being attacked
+	movePower- the attack power of the move being used to attack
+	isMeleeAttack- whether the attack being used is contact or ranged
+	isSTAB- whether the PlayerCharacter is the same type as the move
+	effectiveness- how much the move affects the target
+
+	The function takes the multiple factors involved with an attack, including the arguments as well 
+	as stats within the PlayerCharacters to determine how much damage an attack does
+*/
+void APlayerCharacter::DealDamage(APlayerCharacter target, int movePower, bool isMeleeAttack, 
+	bool isSTAB, int effectiveness)
 {
+	// Breaks the many moving parts of the formula down into digestable portions
 	int totalDamage;
 	float attackPortion;
 	float defensePortion;
+	float damageModifier;
 
 	switch (isMeleeAttack)
 	{
@@ -72,9 +87,71 @@ void APlayerCharacter::DealDamage(APlayerCharacter target, int movePower, bool i
 		break;
 	}
 
-	target.TakeDamage(totalDamage);
+	switch (effectiveness)
+	{
+	case -2:
+		if (isSTAB)
+		{
+			damageModifier = 0.3;
+		}
+		else 
+		{
+			damageModifier = 0.25;
+		}
+		break;
+	case -1:
+		if (isSTAB)
+		{
+			damageModifier = 0.6;
+		}
+		else
+		{
+			damageModifier = 0.5;
+		}
+		break;
+	case 0:
+		if (isSTAB)
+		{
+			damageModifier = 1.2;
+		}
+		else
+		{
+			damageModifier = 1.0;
+		}
+		break;
+	case 1:
+		if (isSTAB)
+		{
+			damageModifier = 1.8;
+		}
+		else
+		{
+			damageModifier = 1.5;
+		}
+		break;
+	case 2:
+		if (isSTAB)
+		{
+			damageModifier = 2.4;
+		}
+		else
+		{
+			damageModifier = 2.0;
+		}
+		break;
+	}
+
+	target.TakeDamage(totalDamage * damageModifier);
 }
 
+
+/*
+	Takes 1 argument:
+	oncomingDamage- the amount of damage the PlayerCharacter is about to take
+
+	The function will take the damage and apply it to the PlayerCharacter's health, rendering them
+	unable to fight if their health reaches 0
+*/
 void APlayerCharacter::TakeDamage(int oncomingDamage)
 {
 	_health -= oncomingDamage;
@@ -86,53 +163,145 @@ void APlayerCharacter::TakeDamage(int oncomingDamage)
 	}
 }
 
-void APlayerCharacter::StatChange(int statStage, int statChanged, int whichStat)
+
+/*
+	Takes 4 arguments:
+	statStage- the amount of change already applied to the stat in question
+	statChanged- the specific stat being changed
+	statChangedInBattle- the stat being changed, as portrayed within the battle
+	amountChanged- how many stages the stat stage will be changed by
+
+	The function will take these arguments, change the stage of the stats, and use that to determine
+	what the new stat amount is
+*/
+void APlayerCharacter::StatChange(int statStage, int statChanged, 
+	int statChangedInBattle, int amountChanged)
 {
-	/* Gotta totally rework this
-	int _statStage = statChanged;
-	_statStage += statStage;
+	// Change the stat stage by the amount
+	statStage += amountChanged;
 
-
-	if (_statStage < -3)
+	// Ensure the stat stage does not exceed 3 or -3
+	if (statStage < -3)
 	{ 
-		statChanged = -3;
+		statStage = -3;
 	}
-	else if (_statStage > 3)
+	else if (statStage > 3)
 	{
-		statChanged = 3;
-	}
-	else
-	{
-		statChanged = _statStage;
+		statStage = 3;
 	}
 
-	switch (statChanged)
+	// Change the stat in battle depending on which stage it's at
+	switch (statStage)
 	{
 	case -3: 
-		statChanged *= 0.25;
+		statChangedInBattle = statChanged * 0.25;
 		break;
 	case -2:
-		statChanged *= 0.5;
+		statChangedInBattle = statChanged * 0.5;
 		break;
 	case -1:
-		statChanged *= 0.8;
+		statChangedInBattle = statChanged * 0.8;
 		break;
 	case 0:
-		statChanged *= 1;
+		statChangedInBattle = statChanged * 1;
 		break;
 	case 1:
-		statChanged *= 1.2;
+		statChangedInBattle = statChanged * 1.2;
 		break;
 	case 2:
-		statChanged *= 1.5;
+		statChangedInBattle = statChanged * 1.5;
 		break;
 	case 3:
-		statChanged *= 2;
+		statChangedInBattle = statChanged * 2;
 		break;
 	}
-	*/
+	
 }
 
+
+/*
+	Takes 1 argument:
+	partyMembersActive- the amount of party members that are still able to fight
+
+	The function takes the amount of PlayerCharacters that are still active and uses it to gauge the
+	current PlayerCharacter's adrenaline: i.e. the rate at which it recovers stamina between turns
+*/
+void APlayerCharacter::StaminaRecharge(int partyMembersActive)
+{
+	int staminaGain;
+
+	switch (partyMembersActive)
+	{
+	case 0:
+		staminaGain = _maxStamina * 0.25;
+
+		if (staminaGain < 5)
+			staminaGain = 5;
+
+		break;
+	case 1:
+		staminaGain = _maxStamina * 0.2;
+
+		if (staminaGain < 4)
+			staminaGain = 4;
+
+		break;
+	case 2:
+		staminaGain = _maxStamina * 0.15;
+
+		if (staminaGain < 3)
+			staminaGain = 3;
+
+		break;
+	case 3:
+		staminaGain = _maxStamina * 0.1;
+
+		if (staminaGain < 2)
+			staminaGain = 2;
+
+		break;
+	case 4:
+		staminaGain = _maxStamina * 0.05;
+
+		if (staminaGain < 1)
+			staminaGain = 1;
+
+		break;
+	case 5:
+		// No stamina will be gained between turns if all party members are able to fight
+		staminaGain = 0;
+		break;
+	}
+
+	_stamina += staminaGain;
+	if (_stamina > _maxStamina)
+		_stamina = _maxStamina;
+}
+
+/*
+	Takes no arguments.
+
+	If invoked, the function penalizes the PlayerCharacter for using more stamina than they had
+	available by lowering all of its modifiable stats, and preventing it from using moves over its
+	stamina limit for 3 turns
+*/
+void APlayerCharacter::StaminaPenalty()
+{
+	StatChange(_mAtkStage, _mAttack, _battleMAttack, -2);
+	StatChange(_rAtkStage, _rAttack, _battleRAttack, -2);
+	StatChange(_mDefStage, _mDefense, _battleMDefense, -2);
+	StatChange(_rDefStage, _rDefense, _battleRDefense, -2);
+
+	_exhaustionTimer = 3;
+}
+
+
+/*
+	Takes no arguments.
+
+	The function works within a specific PlayerCharacter, using its base stats and level 
+	to determine the actual stats used by the PlayerCharacter
+*/
 void APlayerCharacter::DetermineStats()
 {
 	_health = (0.05 * (3 * _baseHealth * _level)) + (_level * (1 + (0.01 * _level))) + 20;
@@ -143,5 +312,5 @@ void APlayerCharacter::DetermineStats()
 	_rDefense = (0.05 * (3 * _baseRDefense * _level)) + 10;
 
 	_stamina = (0.02 * (_baseSpeed * 2 * _level)) + 10;
+	_maxStamina = _stamina;
 }
-
