@@ -14,13 +14,19 @@ APlayerCharacter::APlayerCharacter()
 	_baseMDefense = 1;
 	_baseRDefense = 1;
 	_baseSpeed = 1;
+
+	elementalType[0] = -1; elementalType[1] = -1;
+
+	DetermineStats();
 }
 
-APlayerCharacter::APlayerCharacter(int level, int hp, int mAttack, int rAttack, int mDefense, int rDefense, int speed)
+APlayerCharacter::APlayerCharacter(int level, int hp, int mAttack, int rAttack, 
+	int mDefense, int rDefense, int speed, int typeOne, int typeTwo)
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	//Sets the important base stats of the PlayerCharacter
 	_level = level;
 
 	_baseHealth = hp;
@@ -29,6 +35,10 @@ APlayerCharacter::APlayerCharacter(int level, int hp, int mAttack, int rAttack, 
 	_baseMDefense = mDefense;
 	_baseRDefense = rDefense;
 	_baseSpeed = speed;
+
+	elementalType[0] = typeOne; elementalType[1] = typeTwo;
+
+	DetermineStats();
 }
 
 // Called when the game starts or when spawned
@@ -220,6 +230,92 @@ void APlayerCharacter::StatChange(int statStage, int statChanged,
 
 
 /*
+	Takes no arguments.
+
+	Resets all modifiable stats to their previous state.
+*/
+void APlayerCharacter::ResetStats()
+{
+	_battleMAttack = _mAttack;
+	_battleRAttack = _rAttack;
+	_battleMDefense = _mDefense;
+	_battleRDefense = _rDefense;
+}
+
+
+/*
+	Takes no arguments.
+
+	Applies an affliction to the PlayerCharacter
+*/
+void APlayerCharacter::AnnoyedAffliction()
+{
+	affliction = 1;
+}
+
+void APlayerCharacter::UseMove(UAttackMoves attackMove)
+{
+}
+
+void APlayerCharacter::BleedingAffliction()
+{
+	affliction = 2;
+}
+
+void APlayerCharacter::BurnAffliction()
+{
+	affliction = 3;
+}
+
+void APlayerCharacter::CorruptedAffliction()
+{
+	affliction = 4;
+}
+
+void APlayerCharacter::FlashburnAffliction()
+{
+	affliction = 5;
+}
+
+void APlayerCharacter::FracturedAffliction()
+{
+	affliction = 6;
+}
+
+void APlayerCharacter::FreezeAffliction()
+{
+	affliction = 7;
+}
+
+void APlayerCharacter::SleepAffliction()
+{
+	affliction = 8;
+}
+
+void APlayerCharacter::StunAffliction()
+{
+	affliction = 9;
+}
+
+void APlayerCharacter::TerrorAffliction()
+{
+	affliction = 10;
+}
+
+
+/*
+	Takes 1 argument:
+
+
+*/
+void APlayerCharacter::LevelUp(int levelsGained)
+{
+	_level += levelsGained;
+	DetermineStats();
+}
+
+
+/*
 	Takes 1 argument:
 	partyMembersActive- the amount of party members that are still able to fight
 
@@ -293,6 +389,7 @@ void APlayerCharacter::StaminaPenalty()
 	StatChange(_rDefStage, _rDefense, _battleRDefense, -2);
 
 	_exhaustionTimer = 3;
+	_staminaLock = true;
 }
 
 
@@ -313,4 +410,21 @@ void APlayerCharacter::DetermineStats()
 
 	_stamina = (0.02 * (_baseSpeed * 2 * _level)) + 10;
 	_maxStamina = _stamina;
+}
+
+void APlayerCharacter::StatusCheck()
+{
+	switch (afflictionTimer)
+	{
+	case 0:
+		affliction = 0;
+		break;
+	}
+
+	switch (_exhaustionTimer)
+	{
+	case 0:
+		_staminaLock = false;
+		break;
+	}
 }

@@ -2,21 +2,24 @@
 
 #pragma once
 
+#include "AttackMoves.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "PlayerCharacter.generated.h"
+
 
 UCLASS()
 class TBRPGCOMBATSYSTEM_API APlayerCharacter : public APawn
 {
 	GENERATED_BODY()
 
+
 public:
 	// Sets default values for this pawn's properties
 	APlayerCharacter();
 
 	APlayerCharacter(int level, int hp, int mAttack, int rAttack, 
-		int mDefense, int rDefense, int speed);
+		int mDefense, int rDefense, int speed, int typeOne, int typeTwo);
 
 protected:
 	// Called when the game starts or when spawned
@@ -44,11 +47,28 @@ public:
 		bool isSTAB, int effectiveness);
 	void TakeDamage(int oncomingDamage);
 	void StatChange(int statStage, int statChanged, int statChangedInBattle, int amountChanged);
+	void ResetStats();
+
+	void CorruptedAffliction();
+	void FlashburnAffliction();
+	void TerrorAffliction();
+	void BurnAffliction();
+	void FreezeAffliction();
+	void BleedingAffliction();
+	void StunAffliction();
+	void FracturedAffliction();
+	void SleepAffliction();
+	void AnnoyedAffliction();
+
+	void UseMove(UAttackMoves attackMove, APlayerCharacter target);
 
 private:
+	void LevelUp(int levelsGained);
 	void StaminaRecharge(int partyMembersActive);
 	void StaminaPenalty();
 	void DetermineStats();
+
+	void StatusCheck();
 
 //	The many numbers which make an RPG work while being balanced
 private:
@@ -93,4 +113,31 @@ private:
 
 	// How long a PlayerCharacter is exhausted for.
 	int _exhaustionTimer;
+	bool _staminaLock;
+
+public:
+	int affliction = 0;
+	int afflictionTimer;
+
+	int elementalType[2];
 };
+
+/*
+	Types:
+	0. Aqua
+	1. Beast
+	2. Corruption
+	3. Crystal
+	4. Earth
+	5. Energy
+	6. Flame
+	7. Frost
+	8. Insect
+	9. Light
+	10. Metal
+	11. Nature
+	12. Shadow
+	13. Spirit
+	14. Wind
+	-1. No type
+*/
