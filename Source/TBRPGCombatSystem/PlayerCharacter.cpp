@@ -247,7 +247,7 @@ void APlayerCharacter::ResetStats()
 void APlayerCharacter::UseMove(UAttackMoves attackMove, APlayerCharacter target)
 {
 	int attackType = attackMove.GetMoveType();
-	bool isSTAB;
+	bool isSTAB = false;
 	int effectiveness = 0;
 
 	if (elementalType[0] == attackType || elementalType[1] == attackType)
@@ -255,29 +255,10 @@ void APlayerCharacter::UseMove(UAttackMoves attackMove, APlayerCharacter target)
 		isSTAB = true;
 	}
 
-	/*
-		if (attackType is strong against target.GetTypeOne() 
-		&& attackType is strong against target.GetTypeTwo())
-		{
-			effectiveness = 2;
-		}
-		else if (attackType is strong against target.GetTypeOne() 
-		|| attackType is strong against target.GetTypeTwo())
-		{
-			effectiveness = 1;
-		}
-		else if (attackType is weak against target.GetTypeOne()
-		&& attackType is weak against target.GetTypeTwo())
-		{
-			effectiveness = -2;
-		}
-		else if (attackType is weak against target.GetTypeOne()
-		|| attackType is weak against target.GetTypeTwo())
-		{
-			effectiveness = -1;
-		}
-	*/
+	effectiveness = TypeCheck(attackType, target.GetTypeOne())
+		+ TypeCheck(attackType, target.GetTypeTwo());
 
+	
 	DealDamage(target, attackMove.GetPower(), attackMove.GetIsMelee(), isSTAB, effectiveness);
 }
 
@@ -463,128 +444,247 @@ int APlayerCharacter::TypeCheck(int attackType, int defenseType)
 	case -1:
 		return 0;
 		break;
-		//Aqua attacking
+	//Aqua attacking
 	case 0:
-		switch (defenseType)
+		//Earth, Flame, Metal or Nature defending
+		if (defenseType == 4 || defenseType == 6 || defenseType == 10 || defenseType == 11)
 		{
-		case 0:
-			//Aqua v Aqua, not effective
-			return -1;
-			break;
-		case 2:
-			//Aqua v Corruption, not effective
-			return -1;
-			break;
-		case 4:
-			//Aqua v Earth, very effective
 			return 1;
-			break;
-		case 5:
-			//Aqua v Energy, not effective
-			return -1;
-			break;
-		case 6:
-			//Aqua v Flame, very effective
-			return 1;
-			break;
-		case 7:
-			//Aqua v Frost, not effective
-			return -1;
-			break;
-		case 10:
-			//Aqua v Metal, very effective
-			return 1;
-			break;
-		case 11:
-			//Aqua v Nature, very effective
-			return 1;
-			break;
 		}
+		//Aqua, Corruption, Energy or Frost defending
+		else if (defenseType == 0 || defenseType == 2 || defenseType == 5 || defenseType == 7)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Beast attacking
+	//Beast attacking
 	case 1:
-		switch (defenseType)
+		//Beast or Spirit defending
+		if (defenseType == 1 || defenseType == 13)
 		{
-		case 1:
 			return 1;
-			break;
-		case 2:
-			return -1;
-			break;
-		case 10:
-			return -1;
-			break;
-		case 13:
-			return 1;
-			break;
 		}
+		//Corruption or Metal Defending
+		else if (defenseType == 2 || defenseType == 10)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Corruption attacking
+	//Corruption attacking
 	case 2:
+		//Beast, Metal or Nature defending
+		if (defenseType == 1 || defenseType == 10 || defenseType == 11)
+		{
+			return 1;
+		}
+		//Aqua, Corruption, Crystal, Insect, Light or Shadow defending
+		else if (defenseType == 0 || defenseType == 2 || defenseType == 3
+			|| defenseType == 8 || defenseType == 9 || defenseType == 12)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Crystal attacking
+	//Crystal attacking
 	case 3:
+		//Corruption, Frost or Light defending
+		if (defenseType == 2 || defenseType == 7 || defenseType == 9)
+		{
+			return 1;
+		}
+		//Earth, Energy or Metal defending
+		else if (defenseType == 4 || defenseType == 5 || defenseType == 10)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Earth attacking
+	//Earth attacking
 	case 4:
+		//Crystal, Metal or Nature defending
+		if (defenseType == 3 || defenseType == 10 || defenseType == 11)
+		{
+			return 1;
+		}
+		//Aqua or Beast defending
+		else if (defenseType == 0 || defenseType == 1)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Energy attacking
+	//Energy attacking
 	case 5:
+		//Aqua, Corruption, Crystal, Shadow or Wind defending
+		if (defenseType == 0 || defenseType == 2 || defenseType == 3
+			|| defenseType == 12 || defenseType == 14)
+		{
+			return 1;
+		}
+		//Energy, Flame, Light, Nature or Spirit defending
+		else if (defenseType == 5 || defenseType == 6 || defenseType == 9
+			|| defenseType == 11 || defenseType == 13)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Flame attacking
+	//Flame attacking
 	case 6:
+		//Metal, Nature and Wind defending
+		if (defenseType == 10 || defenseType == 11 || defenseType == 14)
+		{
+			return 1;
+		}
+		//Aqua, Corruption and Flame defending
+		else if (defenseType == 0 || defenseType == 2 || defenseType == 6)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Frost attacking
+	//Frost attacking
 	case 7:
+		//Aqua, Earth or Nature defending
+		if (defenseType == 0 || defenseType == 4 || defenseType == 11)
+		{
+			return 1;
+		}
+		//Beast, Frost or Metal defending
+		else if (defenseType == 1 || defenseType == 7 || defenseType == 10)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Insect attacking
+	//Insect attacking
 	case 8:
+		//Corruption or Insect defending
+		if (defenseType == 2 || defenseType == 8)
+		{
+			return 1;
+		}
+		//Nature or Wind defending
+		else if (defenseType == 11 || defenseType == 14)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Light attacking
+	//Light attacking
 	case 9:
+		//Corruption or Shadow defending
+		if (defenseType == 2 || defenseType == 12)
+		{
+			return 1;
+		}
+		//Aqua or Crystal defending
+		else if (defenseType == 0 || defenseType == 3)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Metal attacking
+	//Metal attacking
 	case 10:
+		//Crystal or Frost defending
+		if (defenseType == 3 || defenseType == 7)
+		{
+			return 1;
+		}
+		//Earth, Energy, Metal or Nature defending
+		else if (defenseType == 4 || defenseType == 5 || defenseType == 10 || defenseType == 11)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Nature attacking
+	//Nature attacking
 	case 11:
+		//Aqua, Beast, Energy or Spirit defending
+		if (defenseType == 0 || defenseType == 1 || defenseType == 5 || defenseType == 13)
+		{
+			return 1;
+		}
+		//Earth, Flame, Insect, Metal or Nature defending
+		else if (defenseType == 4 || defenseType == 6 || defenseType == 8 || 
+			defenseType == 10 || defenseType == 11)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Shadow attacking
+	//Shadow attacking
 	case 12:
+		//Light or Spirit defending
+		if (defenseType == 9 || defenseType == 13)
+		{
+			return 1;
+		}
+		//Energy or Flame defending
+		else if (defenseType == 5 || defenseType == 6)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Spirit attacking
+	//Spirit attacking
 	case 13:
+		//Crystal, Flame, or Wind defending
+		if (defenseType == 3 || defenseType == 6 || defenseType == 14)
+		{
+			return 1;
+		}
+		//Nature, Shadow, or Spirit defending
+		else if (defenseType == 11 || defenseType == 12 || defenseType == 13)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 
-		//Wind attacking
+	//Wind attacking
 	case 14:
+		//Earth, Flame or Insect defending
+		if (defenseType == 4 || defenseType == 6 || defenseType == 8)
+		{
+			return 1;
+		}
+		//Crystal, Metal or Wind defending
+		else if (defenseType == 3 || defenseType == 10 || defenseType == 14)
+		{
+			return -1;
+		}
+
 		return 0;
 		break;
 	}
