@@ -16,7 +16,7 @@ public:
 	// Sets default values for this component's properties
 	UAttackMoves();
 
-	UAttackMoves(int movePower, int staminaCost, int moveType, bool isMelee);
+	UAttackMoves(int movePower, int staminaCost, int moveType, char attackKind);
 
 protected:
 	// Called when the game starts
@@ -30,31 +30,12 @@ public:
 	int GetPower() { return _movePower; }
 	int GetStamCost() {	return _staminaCost; }
 	int GetMoveType() { return _moveType; }
-	bool GetIsMelee() { return _isMelee; }
+	char GetAttackKind() { return _attackKind; }
+
 
 private:
 	int _movePower;
 	int _staminaCost;
 	int _moveType;
-	bool _isMelee;
+	char _attackKind;
 };
-
-/*
-	Types:
-	0. Aqua
-	1. Beast
-	2. Corruption
-	3. Crystal
-	4. Earth
-	5. Energy
-	6. Flame
-	7. Frost
-	8. Insect
-	9. Light
-	10. Metal
-	11. Nature
-	12. Shadow
-	13. Spirit
-	14. Wind
-	-1. No type
-*/

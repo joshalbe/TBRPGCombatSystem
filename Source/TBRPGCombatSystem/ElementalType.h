@@ -16,6 +16,8 @@ public:
 	// Sets default values for this component's properties
 	UElementalType();
 	UElementalType(int designationNum);
+	UElementalType(TArray<char> typeDesignation);
+	UElementalType(int designationNum, TArray<char> typeDesignation);
 
 protected:
 	// Called when the game starts
@@ -36,8 +38,8 @@ public:
 		
 private:
 	int _designationNumber;
+	TArray<char> _typeDesignation;
 
 	TArray<int> _weak;
 	TArray<int> _resist;
-	
 };

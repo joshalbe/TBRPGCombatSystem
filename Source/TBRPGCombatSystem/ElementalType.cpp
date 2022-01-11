@@ -18,6 +18,16 @@ UElementalType::UElementalType(int designationNum)
 	_designationNumber = designationNum;
 }
 
+UElementalType::UElementalType(TArray<char> typeDesignation)
+{
+	_typeDesignation = typeDesignation;
+}
+
+UElementalType::UElementalType(int designationNum, TArray<char> typeDesignation)
+{
+	_designationNumber = designationNum;
+	_typeDesignation = typeDesignation;
+}
 
 // Called when the game starts
 void UElementalType::BeginPlay()

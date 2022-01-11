@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "AttackMoves.h"
 
 // Sets default values for this component's properties
@@ -17,12 +16,12 @@ UAttackMoves::UAttackMoves()
 }
 
 
-UAttackMoves::UAttackMoves(int movePower, int staminaCost, int moveType, bool isMelee)
+UAttackMoves::UAttackMoves(int movePower, int staminaCost, int moveType, char attackKind)
 {
 	_movePower = movePower;
 	_staminaCost = staminaCost;
 	_moveType = moveType;
-	_isMelee = isMelee;
+	_attackKind = attackKind;
 }
 
 
