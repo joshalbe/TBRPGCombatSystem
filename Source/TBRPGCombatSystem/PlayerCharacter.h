@@ -44,7 +44,7 @@ public:
 	int GetStamina() { return _stamina; }
 
 	int GetTypeOne() { return elementalType[0]; }
-	//UElementalType GetType1() { return typeCombo[0]; }
+	TArray<UElementalType*> GetType() { return typeCombo; }
 	int GetTypeTwo() { return elementalType[1]; }
 	//UElementalType GetType2() { return typeCombo[1]; }
 
@@ -131,5 +131,5 @@ public:
 	int afflictionTimer;
 	//
 	int elementalType[2];
-	//TArray<UElementalType> typeCombo;
+	TArray<UElementalType*> typeCombo;
 };
