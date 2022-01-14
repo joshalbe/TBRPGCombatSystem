@@ -43,23 +43,23 @@ APlayerCharacter::APlayerCharacter(int level, int hp, int mAttack, int rAttack,
 	DetermineStats();
 }
 
-//APlayerCharacter::APlayerCharacter(int level, int hp, int mAttack, int rAttack,
-//	int mDefense, int rDefense, int speed, UElementalType typeOne, UElementalType typeTwo)
-//{
-//	//Sets the important base stats of the PlayerCharacter
-//	_level = level;
-//
-//	_baseHealth = hp;
-//	_baseMAttack = mAttack;
-//	_baseRAttack = rAttack;
-//	_baseMDefense = mDefense;
-//	_baseRDefense = rDefense;
-//	_baseSpeed = speed;
-//
-//	typeCombo.Add(typeOne); typeCombo.Add(typeTwo);
-//
-//	DetermineStats();
-//}
+APlayerCharacter::APlayerCharacter(int level, int hp, int mAttack, int rAttack,
+	int mDefense, int rDefense, int speed, UElementalType* typeOne, UElementalType* typeTwo)
+{
+	//Sets the important base stats of the PlayerCharacter
+	_level = level;
+
+	_baseHealth = hp;
+	_baseMAttack = mAttack;
+	_baseRAttack = rAttack;
+	_baseMDefense = mDefense;
+	_baseRDefense = rDefense;
+	_baseSpeed = speed;
+
+	typeCombo.Add(typeOne); typeCombo.Add(typeTwo);
+
+	DetermineStats();
+}
 
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()

@@ -19,8 +19,8 @@ public:
 
 	APlayerCharacter(int level, int hp, int mAttack, int rAttack, 
 		int mDefense, int rDefense, int speed, int typeOne, int typeTwo);
-	//APlayerCharacter(int level, int hp, int mAttack, int rAttack,
-	//	int mDefense, int rDefense, int speed, UElementalType typeOne, UElementalType typeTwo);
+	APlayerCharacter(int level, int hp, int mAttack, int rAttack,
+		int mDefense, int rDefense, int speed, UElementalType* typeOne, UElementalType* typeTwo);
 
 protected:
 	// Called when the game starts or when spawned
