@@ -17,8 +17,11 @@ public:
 	// Sets default values for this pawn's properties
 	APlayerCharacter();
 
+	///////PLACEHOLDER FUNCTION, NOT CURRENTLY IN USE///////
 	APlayerCharacter(int level, int hp, int mAttack, int rAttack, 
 		int mDefense, int rDefense, int speed, int typeOne, int typeTwo);
+	///////PLACEHOLDER FUNCTION, NOT CURRENTLY IN USE///////
+
 	APlayerCharacter(int level, int hp, int mAttack, int rAttack,
 		int mDefense, int rDefense, int speed, UElementalType* typeOne, UElementalType* typeTwo);
 
@@ -31,7 +34,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
 	// Return the base stats for use in operations
@@ -43,10 +46,13 @@ public:
 	int GetSpeed() { return _baseSpeed; }
 	int GetStamina() { return _stamina; }
 
-	int GetTypeOne() { return elementalType[0]; }
-	TArray<UElementalType*> GetType() { return typeCombo; }
-	int GetTypeTwo() { return elementalType[1]; }
+	//int GetTypeOne() { return elementalType[0]; }
+	//int GetTypeTwo() { return elementalType[1]; }
 	//UElementalType GetType2() { return typeCombo[1]; }
+
+	TArray<UElementalType*> GetType() { return typeCombo; }
+	UElementalType* GetTypeOne() { return typeCombo[0]; }
+	UElementalType* GetTypeTwo() { return typeCombo[1]; }
 
 	void AddExp(int expGain) { _exp += expGain; }
 	void DealDamage(APlayerCharacter target, int movePower, bool isMeleeAttack, 
@@ -78,7 +84,7 @@ private:
 
 	void StatusCheck();
 
-//	The many numbers which make an RPG work while being balanced
+
 private:
 	// Basic values of the PlayerCharacter's status
 	bool _ableToFight = true;
@@ -123,13 +129,18 @@ private:
 	int _exhaustionTimer;
 	bool _staminaLock;
 
-//The stats applied to afflictions/status conditions
+
 public:
 	//Which affliction the PlayerCharacter has
 	int affliction = 0;
 	//How much longer the player will be afflicted with the condition
 	int afflictionTimer;
-	//
-	int elementalType[2];
+	
+	//Array holding the types of the PlayerCharacter
 	TArray<UElementalType*> typeCombo;
+
+
+	///////PLACEHOLDER, NOT CURRENTLY IN USE///////
+	int elementalType[2];
+	///////PLACEHOLDER, NOT CURRENTLY IN USE///////
 };

@@ -22,6 +22,7 @@ APlayerCharacter::APlayerCharacter()
 	DetermineStats();
 }
 
+///////PLACEHOLDER FUNCTION, NOT CURRENTLY IN USE///////
 APlayerCharacter::APlayerCharacter(int level, int hp, int mAttack, int rAttack, 
 	int mDefense, int rDefense, int speed, int typeOne, int typeTwo)
 {
@@ -42,7 +43,22 @@ APlayerCharacter::APlayerCharacter(int level, int hp, int mAttack, int rAttack,
 
 	DetermineStats();
 }
+///////PLACEHOLDER FUNCTION, NOT CURRENTLY IN USE///////
 
+/*
+	Takes 9 arguments:
+	level- the level of the PlayerCharacter on first creation
+	hp- how much hp the character has
+	mAttack- how much melee attack the character has
+	rAttack- how much ranged attack the character has
+	mDefense- how much melee defense the character has
+	rDefense- how much ranged defense the character has
+	speed- how much speed the character has
+	typeOne- what the first type of the character is
+	typeTwo- what the second type of the character is
+
+	Initializes a PlayerCharacter, deciding its stats and types based on the inserted arguments
+*/
 APlayerCharacter::APlayerCharacter(int level, int hp, int mAttack, int rAttack,
 	int mDefense, int rDefense, int speed, UElementalType* typeOne, UElementalType* typeTwo)
 {
@@ -75,18 +91,13 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 }
 
-// Called to bind functionality to input
-//void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-//{
-//	Super::SetupPlayerInputComponent(PlayerInputComponent);
-//
-//}
+ //Called to bind functionality to input
+void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
 
-//TArray<UElementalType> APlayerCharacter::GetType()
-//{
-//	return typeCombo;
-//}
 
 /*
 	Takes 5 arguments:
@@ -336,14 +347,20 @@ void APlayerCharacter::TerrorAffliction()
 }
 
 
+/*
+	Takes 2 arguments:
+	move- the move a Character is using
+	target- the character that's being targeted with the move
+
+	Evaluates the types of the targeted character against the move used against it
+*/
 int APlayerCharacter::TypeCheck(UAttackMoves move, APlayerCharacter target)
 {
 	int effectiveness = 0;
-	int moveType = move.GetMoveType();
 
-	if (moveType)
+	if (move.GetMoveType() && target.GetTypeOne() && target.GetTypeTwo())
 	{
-		if (target.GetTypeOne())
+		for (int i = 0; i < target.GetTypeOne()->GetWeaknesses().Num(); i++)
 		{
 
 		}
@@ -352,6 +369,7 @@ int APlayerCharacter::TypeCheck(UAttackMoves move, APlayerCharacter target)
 
 	return 0;
 }
+
 
 /*
 	Takes 1 argument:
@@ -462,6 +480,7 @@ void APlayerCharacter::DetermineStats()
 	_stamina = (0.02 * (_baseSpeed * 2 * _level)) + 10;
 	_maxStamina = _stamina;
 }
+
 
 /*
 	Takes no arguments.
