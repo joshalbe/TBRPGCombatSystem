@@ -46,16 +46,13 @@ public:
 	int GetSpeed() { return _baseSpeed; }
 	int GetStamina() { return _stamina; }
 
-	//int GetTypeOne() { return elementalType[0]; }
-	//int GetTypeTwo() { return elementalType[1]; }
-	//UElementalType GetType2() { return typeCombo[1]; }
 
 	TArray<UElementalType*> GetType() { return typeCombo; }
 	UElementalType* GetTypeOne() { return typeCombo[0]; }
 	UElementalType* GetTypeTwo() { return typeCombo[1]; }
 
 	void AddExp(int expGain) { _exp += expGain; }
-	void DealDamage(APlayerCharacter target, int movePower, bool isMeleeAttack, 
+	void DealDamage(APlayerCharacter target, int movePower, char isMeleeAttack, 
 		bool isSTAB, int effectiveness);
 	void TakeDamage(int oncomingDamage);
 	void StatChange(int statStage, int statChanged, int statChangedInBattle, int amountChanged);
@@ -72,9 +69,9 @@ public:
 	void SleepAffliction();
 	void AnnoyedAffliction();
 
-	void UseMove(UAttackMoves attackMove, APlayerCharacter target);
+	void UseMove(UAttackMoves* attackMove, APlayerCharacter target);
 
-	int TypeCheck(UAttackMoves move, APlayerCharacter target);
+	int TypeCheck(UAttackMoves* move, APlayerCharacter target);
 
 private:
 	void LevelUp(int levelsGained);
@@ -141,6 +138,6 @@ public:
 
 
 	///////PLACEHOLDER, NOT CURRENTLY IN USE///////
-	int elementalType[2];
+	//int elementalType[2];
 	///////PLACEHOLDER, NOT CURRENTLY IN USE///////
 };

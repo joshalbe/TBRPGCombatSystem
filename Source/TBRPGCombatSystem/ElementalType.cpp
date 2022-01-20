@@ -48,14 +48,14 @@ void UElementalType::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 }
 
 
-void UElementalType::AddWeakness(int addedType)
+void UElementalType::AddWeakness(UElementalType* addedType)
 {
-	_weak.Add(addedType);
+	_weaknesses.Add(addedType);
 }
 
 
-void UElementalType::AddResistance(int addedType)
+void UElementalType::AddResistance(UElementalType* addedType)
 {
-	_resist.Add(addedType);
+	_resistances.Add(addedType);
 }
 

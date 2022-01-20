@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "AttackMoves.h"
+#include "ElementalType.h"
 
 // Sets default values for this component's properties
 UAttackMoves::UAttackMoves()
@@ -11,12 +12,10 @@ UAttackMoves::UAttackMoves()
 
 	_movePower = 0;
 	_staminaCost = 0;
-	_moveType = -1;
-	//_isMelee = null;
 }
 
 
-UAttackMoves::UAttackMoves(int movePower, int staminaCost, int moveType, char attackKind)
+UAttackMoves::UAttackMoves(int movePower, int staminaCost, UElementalType* moveType, char attackKind)
 {
 	_movePower = movePower;
 	_staminaCost = staminaCost;

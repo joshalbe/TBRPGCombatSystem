@@ -17,7 +17,6 @@ APlayerCharacter::APlayerCharacter()
 	_baseRDefense = 1;
 	_baseSpeed = 1;
 
-	elementalType[0] = -1; elementalType[1] = -1;
 
 	DetermineStats();
 }
@@ -39,7 +38,7 @@ APlayerCharacter::APlayerCharacter(int level, int hp, int mAttack, int rAttack,
 	_baseRDefense = rDefense;
 	_baseSpeed = speed;
 
-	elementalType[0] = typeOne; elementalType[1] = typeTwo;
+	//elementalType[0] = typeOne; elementalType[1] = typeTwo;
 
 	DetermineStats();
 }
@@ -110,7 +109,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	The function takes the multiple factors involved with an attack, including the arguments as well 
 	as stats within the PlayerCharacters to determine how much damage an attack does
 */
-void APlayerCharacter::DealDamage(APlayerCharacter target, int movePower, bool isMeleeAttack, 
+void APlayerCharacter::DealDamage(APlayerCharacter target, int movePower, char isMeleeAttack, 
 	bool isSTAB, int effectiveness)
 {
 	// Breaks the many moving parts of the formula down into digestable portions
@@ -121,12 +120,12 @@ void APlayerCharacter::DealDamage(APlayerCharacter target, int movePower, bool i
 
 	switch (isMeleeAttack)
 	{
-	case true:
+	case 'm':
 		attackPortion = _battleMAttack + (movePower * (1 + (0.03 * _level)));
 		defensePortion = target.GetMDefense() * (1 + (0.03 * target.GetLevel()));
 		totalDamage = (attackPortion * attackPortion) / (defensePortion * 3);
 		break;
-	case false:
+	case 'r':
 		attackPortion = _battleRAttack + (movePower * (1 + (0.03 * _level)));
 		defensePortion = target.GetRDefense() * (1 + (0.03 * target.GetLevel()));
 		totalDamage = (attackPortion * attackPortion) / (defensePortion * 3);
@@ -279,25 +278,21 @@ void APlayerCharacter::ResetStats()
 }
 
 
-//
-//void APlayerCharacter::UseMove(UAttackMoves attackMove, APlayerCharacter target)
-//{
-//	int attackType = attackMove.GetMoveType();
-//	bool isSTAB = false;
-//	int effectiveness = 0;
-//
-//	if (elementalType[0] == attackType || elementalType[1] == attackType)
-//	{
-//		isSTAB = true;
-//	}
-//
-//	effectiveness = TypeCheck(attackType, target.GetTypeOne())
-//		+ TypeCheck(attackType, target.GetTypeTwo());
-//
-//	
-//	DealDamage(target, attackMove.GetPower(), attackMove.GetIsMelee(), isSTAB, effectiveness);
-//}
-//
+
+void APlayerCharacter::UseMove(UAttackMoves* attackMove, APlayerCharacter target)
+{
+	bool isSTAB = false;
+
+	if (typeCombo[0] == attackMove->GetMoveType() || typeCombo[1] == attackMove->GetMoveType())
+	{
+		isSTAB = true;
+	}
+
+	int effectiveness = TypeCheck(attackMove, target);
+
+	DealDamage(target, attackMove->GetPower(), attackMove->GetAttackKind(), isSTAB, effectiveness);
+}
+
 
 
 /*
@@ -354,18 +349,48 @@ void APlayerCharacter::TerrorAffliction()
 
 	Evaluates the types of the targeted character against the move used against it
 */
-int APlayerCharacter::TypeCheck(UAttackMoves move, APlayerCharacter target)
+int APlayerCharacter::TypeCheck(UAttackMoves* move, APlayerCharacter target)
 {
 	int effectiveness = 0;
 
-	if (move.GetMoveType() && target.GetTypeOne() && target.GetTypeTwo())
+	//Make sure the types exist
+	if (move->GetMoveType() && target.GetTypeOne() && target.GetTypeTwo())
 	{
+		//Compare the move's type to the first type's list of weaknesses
 		for (int i = 0; i < target.GetTypeOne()->GetWeaknesses().Num(); i++)
 		{
-
+			if (move->GetMoveType() == target.GetTypeOne()->GetWeaknesses()[i])
+			{
+				effectiveness += 1;
+			}
 		}
-	}
+		//Compare the move's type to the second type's list of weaknesses
+		for (int i = 0; i < target.GetTypeTwo()->GetWeaknesses().Num(); i++)
+		{
+			if (move->GetMoveType() == target.GetTypeTwo()->GetWeaknesses()[i])
+			{
+				effectiveness += 1;
+			}
+		}
+		//Compare the move's type to the first type's list of resistances
+		for (int i = 0; i < target.GetTypeOne()->GetResistances().Num(); i++)
+		{
+			if (move->GetMoveType() == target.GetTypeOne()->GetResistances()[i])
+			{
+				effectiveness -= 1;
+			}
+		}
+		//Compare the move's type to the second type's list of resistances
+		for (int i = 0; i < target.GetTypeTwo()->GetResistances().Num(); i++)
+		{
+			if (move->GetMoveType() == target.GetTypeTwo()->GetResistances()[i])
+			{
+				effectiveness -= 1;
+			}
+		}
 
+		return effectiveness;
+	}
 
 	return 0;
 }

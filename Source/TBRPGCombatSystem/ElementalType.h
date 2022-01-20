@@ -28,18 +28,19 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 
-	virtual void AddWeakness(int addedType);
-	virtual void AddResistance(int addedType);
+	virtual void AddWeakness(UElementalType* addedType);
+	virtual void AddResistance(UElementalType* addedType);
 
-	virtual TArray<int> GetWeaknesses() { return _weak; }
-	virtual TArray<int> GetResistances() { return _resist; }
+	virtual TArray<UElementalType*> GetWeaknesses() { return _weaknesses; }
+	virtual TArray<UElementalType*> GetResistances() { return _resistances; }
 
-	
+	virtual int GetDesignationNumber() { return _designationNumber; }
+	virtual TArray<char> GetDesignationName() { return _typeDesignation; }
 		
 private:
 	int _designationNumber;
 	TArray<char> _typeDesignation;
 
-	TArray<int> _weak;
-	TArray<int> _resist;
+	TArray<UElementalType*> _weaknesses;
+	TArray<UElementalType*> _resistances;
 };
