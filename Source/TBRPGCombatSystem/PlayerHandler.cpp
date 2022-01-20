@@ -131,33 +131,21 @@ void UPlayerHandler::DealDamage(UPlayerHandler* target, int movePower, char isMe
 		break;
 	case 0:
 		if (isSTAB)
-		{
-			damageModifier = 1.2;
-		}
+		{ damageModifier = 1.2; }
 		else
-		{
-			damageModifier = 1.0;
-		}
+		{ damageModifier = 1.0; }
 		break;
 	case 1:
 		if (isSTAB)
-		{
-			damageModifier = 1.8;
-		}
+		{ damageModifier = 1.8; }
 		else
-		{
-			damageModifier = 1.5;
-		}
+		{ damageModifier = 1.5; }
 		break;
 	case 2:
 		if (isSTAB)
-		{
-			damageModifier = 2.4;
-		}
+		{ damageModifier = 2.4; }
 		else
-		{
-			damageModifier = 2.0;
-		}
+		{ damageModifier = 2.0; }
 		break;
 	}
 
@@ -353,8 +341,8 @@ void UPlayerHandler::LevelUp(int levelsGained)
 	Takes 1 argument:
 	partyMembersActive- the amount of party members that are still able to fight
 
-	The function takes the amount of PlayerCharacters that are still active and uses it to gauge the
-	current PlayerCharacter's adrenaline: i.e. the rate at which it recovers stamina between turns
+	The function takes the amount of PlayerHandlers that are still active and uses it to gauge the
+	current PlayerHandler's adrenaline: i.e. the rate at which it recovers stamina between turns
 */
 void UPlayerHandler::StaminaRecharge(int partyMembersActive)
 {
@@ -412,7 +400,7 @@ void UPlayerHandler::StaminaRecharge(int partyMembersActive)
 /*
 	Takes no arguments.
 
-	If invoked, the function penalizes the PlayerCharacter for using more stamina than they had
+	If invoked, the function penalizes the PlayerHandler for using more stamina than they had
 	available by lowering all of its modifiable stats, and preventing it from using moves over its
 	stamina limit for 3 turns
 */
@@ -431,8 +419,8 @@ void UPlayerHandler::StaminaPenalty()
 /*
 	Takes no arguments.
 
-	The function works within a specific PlayerCharacter, using its base stats and level
-	to determine the actual stats used by the PlayerCharacter
+	The function works within a specific PlayerHandler, using its base stats and level
+	to determine the actual stats used by the PlayerHandler
 */
 void UPlayerHandler::DetermineStats()
 {

@@ -59,8 +59,7 @@ public:
 
 	void AfterBattle();
 	
-	// Not necessary for use //
-	//Applies an affliction to the PlayerCharacter
+	//Applies an affliction to the PlayerHandler
 	void CorruptedAffliction() { affliction = 1; }
 	void FlashburnAffliction() { affliction = 2; }
 	void TerrorAffliction() { affliction = 3; }
@@ -71,7 +70,6 @@ public:
 	void FracturedAffliction() { affliction = 8; }
 	void SleepAffliction() { affliction = 9; }
 	void AnnoyedAffliction() { affliction = 10; }
-	// Not necessary for use //
 	
 
 private:
@@ -84,13 +82,13 @@ private:
 
 
 private:
-	// Basic values of the PlayerCharacter's status
+	// Basic values of the PlayerHandler's status
 	bool _ableToFight = true;
 	UPROPERTY(EditAnywhere)
 	int _level;
 	int _exp;
 
-	// The base stats of a PlayerCharacter, which doesn't change through leveling
+	// The base stats of a PlayerHandler, which doesn't change through leveling
 	UPROPERTY(EditAnywhere)
 	int _baseHealth;
 	UPROPERTY(EditAnywhere)
@@ -104,11 +102,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	int _baseSpeed;
 
-	// The maximum amount a PlayerCharacter can have at a given level
+	// The maximum amount a PlayerHandler can have at a given level
 	int _maxHealth;
 	int _maxStamina;
 
-	// The stats a PlayerCharacter holds at their current level. Only raises permanently through
+	// The stats a PlayerHandler holds at their current level. Only raises permanently through
 	// leveling
 	int _health;
 	int _mAttack;
@@ -130,7 +128,7 @@ private:
 	int _mDefStage;
 	int _rDefStage;
 
-	// How long a PlayerCharacter is exhausted for.
+	// How long a PlayerHandler is exhausted for.
 	int _exhaustionTimer;
 	bool _staminaLock;
 
