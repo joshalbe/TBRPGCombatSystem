@@ -109,7 +109,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	The function takes the multiple factors involved with an attack, including the arguments as well 
 	as stats within the PlayerCharacters to determine how much damage an attack does
 */
-void APlayerCharacter::DealDamage(APlayerCharacter target, int movePower, char isMeleeAttack, 
+void APlayerCharacter::DealDamage(APlayerCharacter* target, int movePower, char isMeleeAttack, 
 	bool isSTAB, int effectiveness)
 {
 	// Breaks the many moving parts of the formula down into digestable portions
@@ -122,12 +122,12 @@ void APlayerCharacter::DealDamage(APlayerCharacter target, int movePower, char i
 	{
 	case 'm':
 		attackPortion = _battleMAttack + (movePower * (1 + (0.03 * _level)));
-		defensePortion = target.GetMDefense() * (1 + (0.03 * target.GetLevel()));
+		defensePortion = target->GetMDefense() * (1 + (0.03 * target->GetLevel()));
 		totalDamage = (attackPortion * attackPortion) / (defensePortion * 3);
 		break;
 	case 'r':
 		attackPortion = _battleRAttack + (movePower * (1 + (0.03 * _level)));
-		defensePortion = target.GetRDefense() * (1 + (0.03 * target.GetLevel()));
+		defensePortion = target->GetRDefense() * (1 + (0.03 * target->GetLevel()));
 		totalDamage = (attackPortion * attackPortion) / (defensePortion * 3);
 		break;
 	}
@@ -186,7 +186,7 @@ void APlayerCharacter::DealDamage(APlayerCharacter target, int movePower, char i
 		break;
 	}
 
-	target.TakeDamage(totalDamage * damageModifier);
+	target->TakeDamage(totalDamage * damageModifier);
 }
 
 
@@ -278,8 +278,10 @@ void APlayerCharacter::ResetStats()
 }
 
 
-
-void APlayerCharacter::UseMove(UAttackMoves* attackMove, APlayerCharacter target)
+/*
+	Takes 2 arguments:
+*/
+void APlayerCharacter::UseMove(UAttackMoves* attackMove, APlayerCharacter* target)
 {
 	bool isSTAB = false;
 
@@ -349,41 +351,41 @@ void APlayerCharacter::TerrorAffliction()
 
 	Evaluates the types of the targeted character against the move used against it
 */
-int APlayerCharacter::TypeCheck(UAttackMoves* move, APlayerCharacter target)
+int APlayerCharacter::TypeCheck(UAttackMoves* move, APlayerCharacter* target)
 {
 	int effectiveness = 0;
 
 	//Make sure the types exist
-	if (move->GetMoveType() && target.GetTypeOne() && target.GetTypeTwo())
+	if (move->GetMoveType() && target->GetTypeOne() && target->GetTypeTwo())
 	{
 		//Compare the move's type to the first type's list of weaknesses
-		for (int i = 0; i < target.GetTypeOne()->GetWeaknesses().Num(); i++)
+		for (int i = 0; i < target->GetTypeOne()->GetWeaknesses().Num(); i++)
 		{
-			if (move->GetMoveType() == target.GetTypeOne()->GetWeaknesses()[i])
+			if (move->GetMoveType() == target->GetTypeOne()->GetWeaknesses()[i])
 			{
 				effectiveness += 1;
 			}
 		}
 		//Compare the move's type to the second type's list of weaknesses
-		for (int i = 0; i < target.GetTypeTwo()->GetWeaknesses().Num(); i++)
+		for (int i = 0; i < target->GetTypeTwo()->GetWeaknesses().Num(); i++)
 		{
-			if (move->GetMoveType() == target.GetTypeTwo()->GetWeaknesses()[i])
+			if (move->GetMoveType() == target->GetTypeTwo()->GetWeaknesses()[i])
 			{
 				effectiveness += 1;
 			}
 		}
 		//Compare the move's type to the first type's list of resistances
-		for (int i = 0; i < target.GetTypeOne()->GetResistances().Num(); i++)
+		for (int i = 0; i < target->GetTypeOne()->GetResistances().Num(); i++)
 		{
-			if (move->GetMoveType() == target.GetTypeOne()->GetResistances()[i])
+			if (move->GetMoveType() == target->GetTypeOne()->GetResistances()[i])
 			{
 				effectiveness -= 1;
 			}
 		}
 		//Compare the move's type to the second type's list of resistances
-		for (int i = 0; i < target.GetTypeTwo()->GetResistances().Num(); i++)
+		for (int i = 0; i < target->GetTypeTwo()->GetResistances().Num(); i++)
 		{
-			if (move->GetMoveType() == target.GetTypeTwo()->GetResistances()[i])
+			if (move->GetMoveType() == target->GetTypeTwo()->GetResistances()[i])
 			{
 				effectiveness -= 1;
 			}

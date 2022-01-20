@@ -52,7 +52,7 @@ public:
 	UElementalType* GetTypeTwo() { return typeCombo[1]; }
 
 	void AddExp(int expGain) { _exp += expGain; }
-	void DealDamage(APlayerCharacter target, int movePower, char isMeleeAttack, 
+	void DealDamage(APlayerCharacter* target, int movePower, char isMeleeAttack, 
 		bool isSTAB, int effectiveness);
 	void TakeDamage(int oncomingDamage);
 	void StatChange(int statStage, int statChanged, int statChangedInBattle, int amountChanged);
@@ -69,9 +69,9 @@ public:
 	void SleepAffliction();
 	void AnnoyedAffliction();
 
-	void UseMove(UAttackMoves* attackMove, APlayerCharacter target);
+	void UseMove(UAttackMoves* attackMove, APlayerCharacter* target);
 
-	int TypeCheck(UAttackMoves* move, APlayerCharacter target);
+	int TypeCheck(UAttackMoves* move, APlayerCharacter* target);
 
 private:
 	void LevelUp(int levelsGained);
