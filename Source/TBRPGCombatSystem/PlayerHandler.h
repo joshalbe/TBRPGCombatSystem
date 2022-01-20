@@ -54,6 +54,11 @@ public:
 	void UseMove(UAttackMoves* attackMove, UPlayerHandler* target);
 	int TypeCheck(UAttackMoves* move, UPlayerHandler* target);
 
+	void AddMove(UAttackMoves* move) { knownMoves.Add(move); }
+	TArray<UAttackMoves*> GetMoves() { return knownMoves; }
+
+	void AfterBattle();
+	
 	//Applies an affliction to the PlayerCharacter
 	void CorruptedAffliction() { affliction = 1; }
 	void FlashburnAffliction() { affliction = 2; }
@@ -65,6 +70,7 @@ public:
 	void FracturedAffliction() { affliction = 8; }
 	void SleepAffliction() { affliction = 9; }
 	void AnnoyedAffliction() { affliction = 10; }
+	
 
 private:
 	//Functions the character can handle for itself
@@ -78,15 +84,22 @@ private:
 private:
 	// Basic values of the PlayerCharacter's status
 	bool _ableToFight = true;
+	UPROPERTY(EditAnywhere)
 	int _level;
 	int _exp;
 
-	// The base stats of a PlayerCharacter, which never changes
+	// The base stats of a PlayerCharacter, which doesn't change through leveling
+	UPROPERTY(EditAnywhere)
 	int _baseHealth;
+	UPROPERTY(EditAnywhere)
 	int _baseMAttack;
+	UPROPERTY(EditAnywhere)
 	int _baseRAttack;
+	UPROPERTY(EditAnywhere)
 	int _baseMDefense;
+	UPROPERTY(EditAnywhere)
 	int _baseRDefense;
+	UPROPERTY(EditAnywhere)
 	int _baseSpeed;
 
 	// The maximum amount a PlayerCharacter can have at a given level
@@ -129,4 +142,6 @@ public:
 	//Array holding the types of the PlayerCharacter
 	TArray<UElementalType*> typeCombo;
 		
+	TArray<UAttackMoves*> knownMoves;
+
 };

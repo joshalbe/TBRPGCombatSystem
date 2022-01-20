@@ -22,7 +22,7 @@ UPlayerHandler::UPlayerHandler()
 
 /*
 	Takes 9 arguments:
-	level- the level of the PlayerCharacter on first creation
+	level- the level of the PlayerHandler on first creation
 	hp- how much hp the character has
 	mAttack- how much melee attack the character has
 	rAttack- how much ranged attack the character has
@@ -32,7 +32,7 @@ UPlayerHandler::UPlayerHandler()
 	typeOne- what the first type of the character is
 	typeTwo- what the second type of the character is
 
-	Initializes a PlayerCharacter, deciding its stats and types based on the inserted arguments
+	Initializes a PlayerHandler, deciding its stats and types based on the inserted arguments
 */
 UPlayerHandler::UPlayerHandler(int level, int hp, int mAttack, int rAttack,
 	int mDefense, int rDefense, int speed, UElementalType* typeOne, UElementalType* typeTwo)
@@ -76,11 +76,11 @@ void UPlayerHandler::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	target- the PlayerCharacter that is being attacked
 	movePower- the attack power of the move being used to attack
 	isMeleeAttack- whether the attack being used is contact or ranged
-	isSTAB- whether the PlayerCharacter is the same type as the move
+	isSTAB- whether the PlayerHandler is the same type as the move
 	effectiveness- how much the move affects the target
 
 	The function takes the multiple factors involved with an attack, including the arguments as well
-	as stats within the PlayerCharacters to determine how much damage an attack does
+	as stats within the PlayerHandlers to determine how much damage an attack does
 */
 void UPlayerHandler::DealDamage(UPlayerHandler* target, int movePower, char isMeleeAttack,
 	bool isSTAB, int effectiveness)
@@ -328,6 +328,11 @@ int UPlayerHandler::TypeCheck(UAttackMoves* move, UPlayerHandler* target)
 	}
 
 	return 0;
+}
+
+void UPlayerHandler::AfterBattle()
+{
+	ResetStats();
 }
 
 
