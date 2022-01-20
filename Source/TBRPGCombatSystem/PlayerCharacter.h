@@ -17,11 +17,6 @@ public:
 	// Sets default values for this pawn's properties
 	APlayerCharacter();
 
-	///////PLACEHOLDER FUNCTION, NOT CURRENTLY IN USE///////
-	APlayerCharacter(int level, int hp, int mAttack, int rAttack, 
-		int mDefense, int rDefense, int speed, int typeOne, int typeTwo);
-	///////PLACEHOLDER FUNCTION, NOT CURRENTLY IN USE///////
-
 	APlayerCharacter(int level, int hp, int mAttack, int rAttack,
 		int mDefense, int rDefense, int speed, UElementalType* typeOne, UElementalType* typeTwo);
 
@@ -46,11 +41,12 @@ public:
 	int GetSpeed() { return _baseSpeed; }
 	int GetStamina() { return _stamina; }
 
-
+	//Retrieves the types of the character
 	TArray<UElementalType*> GetType() { return typeCombo; }
 	UElementalType* GetTypeOne() { return typeCombo[0]; }
 	UElementalType* GetTypeTwo() { return typeCombo[1]; }
 
+	//Various necessary tasks to keep the game working as expected
 	void AddExp(int expGain) { _exp += expGain; }
 	void DealDamage(APlayerCharacter* target, int movePower, char isMeleeAttack, 
 		bool isSTAB, int effectiveness);
@@ -58,27 +54,28 @@ public:
 	void StatChange(int statStage, int statChanged, int statChangedInBattle, int amountChanged);
 	void ResetStats();
 
-	void CorruptedAffliction();
-	void FlashburnAffliction();
-	void TerrorAffliction();
-	void BurnAffliction();
-	void FreezeAffliction();
-	void BleedingAffliction();
-	void StunAffliction();
-	void FracturedAffliction();
-	void SleepAffliction();
-	void AnnoyedAffliction();
-
+	//Specific functions for before a move takes effect
 	void UseMove(UAttackMoves* attackMove, APlayerCharacter* target);
-
 	int TypeCheck(UAttackMoves* move, APlayerCharacter* target);
 
+	//Applies an affliction to the PlayerCharacter
+	void CorruptedAffliction() { affliction = 1; }
+	void FlashburnAffliction() { affliction = 2; }
+	void TerrorAffliction() { affliction = 3; }
+	void BurnAffliction() { affliction = 4; }
+	void FreezeAffliction() { affliction = 5; }
+	void BleedingAffliction() { affliction = 6; }
+	void StunAffliction() { affliction = 7; }
+	void FracturedAffliction() { affliction = 8; }
+	void SleepAffliction() { affliction = 9; }
+	void AnnoyedAffliction() { affliction = 10; }
+
 private:
+	//Functions the character can handle for itself
 	void LevelUp(int levelsGained);
 	void StaminaRecharge(int partyMembersActive);
 	void StaminaPenalty();
 	void DetermineStats();
-
 	void StatusCheck();
 
 
@@ -136,8 +133,4 @@ public:
 	//Array holding the types of the PlayerCharacter
 	TArray<UElementalType*> typeCombo;
 
-
-	///////PLACEHOLDER, NOT CURRENTLY IN USE///////
-	//int elementalType[2];
-	///////PLACEHOLDER, NOT CURRENTLY IN USE///////
 };

@@ -21,28 +21,6 @@ APlayerCharacter::APlayerCharacter()
 	DetermineStats();
 }
 
-///////PLACEHOLDER FUNCTION, NOT CURRENTLY IN USE///////
-APlayerCharacter::APlayerCharacter(int level, int hp, int mAttack, int rAttack, 
-	int mDefense, int rDefense, int speed, int typeOne, int typeTwo)
-{
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	//PrimaryActorTick.bCanEverTick = true;
-
-	//Sets the important base stats of the PlayerCharacter
-	_level = level;
-
-	_baseHealth = hp;
-	_baseMAttack = mAttack;
-	_baseRAttack = rAttack;
-	_baseMDefense = mDefense;
-	_baseRDefense = rDefense;
-	_baseSpeed = speed;
-
-	//elementalType[0] = typeOne; elementalType[1] = typeTwo;
-
-	DetermineStats();
-}
-///////PLACEHOLDER FUNCTION, NOT CURRENTLY IN USE///////
 
 /*
 	Takes 9 arguments:
@@ -76,20 +54,19 @@ APlayerCharacter::APlayerCharacter(int level, int hp, int mAttack, int rAttack,
 	DetermineStats();
 }
 
+
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
-
 // Called every frame
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
-
  //Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -118,6 +95,7 @@ void APlayerCharacter::DealDamage(APlayerCharacter* target, int movePower, char 
 	float defensePortion;
 	float damageModifier;
 
+	//Calculates damage based on whether it's a melee or ranged attack
 	switch (isMeleeAttack)
 	{
 	case 'm':
@@ -132,57 +110,38 @@ void APlayerCharacter::DealDamage(APlayerCharacter* target, int movePower, char 
 		break;
 	}
 
+	//Takes the effectiveness of the attack, then multiplies the potential STAB by it
 	switch (effectiveness)
 	{
 	case -2:
 		if (isSTAB)
-		{
-			damageModifier = 0.3;
-		}
+		{ damageModifier = 0.3; }
 		else 
-		{
-			damageModifier = 0.25;
-		}
+		{ damageModifier = 0.25; }
 		break;
 	case -1:
 		if (isSTAB)
-		{
-			damageModifier = 0.6;
-		}
+		{ damageModifier = 0.6; }
 		else
-		{
-			damageModifier = 0.5;
-		}
+		{ damageModifier = 0.5; }
 		break;
 	case 0:
 		if (isSTAB)
-		{
-			damageModifier = 1.2;
-		}
+		{ damageModifier = 1.2; }
 		else
-		{
-			damageModifier = 1.0;
-		}
+		{ damageModifier = 1.0; }
 		break;
 	case 1:
 		if (isSTAB)
-		{
-			damageModifier = 1.8;
-		}
+		{ damageModifier = 1.8; }
 		else
-		{
-			damageModifier = 1.5;
-		}
+		{ damageModifier = 1.5; }
 		break;
 	case 2:
 		if (isSTAB)
-		{
-			damageModifier = 2.4;
-		}
+		{ damageModifier = 2.4; }
 		else
-		{
-			damageModifier = 2.0;
-		}
+		{ damageModifier = 2.0; }
 		break;
 	}
 
@@ -280,6 +239,12 @@ void APlayerCharacter::ResetStats()
 
 /*
 	Takes 2 arguments:
+	attackMove- the move that the character is using
+	target- the character that is being targeted by the move
+
+	Decides whether the attack's move is the same type as the user, then compare's the 
+	move's type to the target's type. It then puts the determined arguments into the 
+	damage calculator function
 */
 void APlayerCharacter::UseMove(UAttackMoves* attackMove, APlayerCharacter* target)
 {
@@ -293,54 +258,6 @@ void APlayerCharacter::UseMove(UAttackMoves* attackMove, APlayerCharacter* targe
 	int effectiveness = TypeCheck(attackMove, target);
 
 	DealDamage(target, attackMove->GetPower(), attackMove->GetAttackKind(), isSTAB, effectiveness);
-}
-
-
-
-/*
-	Takes no arguments.
-
-	Applies an affliction to the PlayerCharacter
-*/
-void APlayerCharacter::AnnoyedAffliction()
-{
-	affliction = 1;
-}
-void APlayerCharacter::BleedingAffliction()
-{
-	affliction = 2;
-}
-void APlayerCharacter::BurnAffliction()
-{
-	affliction = 3;
-}
-void APlayerCharacter::CorruptedAffliction()
-{
-	affliction = 4;
-}
-void APlayerCharacter::FlashburnAffliction()
-{
-	affliction = 5;
-}
-void APlayerCharacter::FracturedAffliction()
-{
-	affliction = 6;
-}
-void APlayerCharacter::FreezeAffliction()
-{
-	affliction = 7;
-}
-void APlayerCharacter::SleepAffliction()
-{
-	affliction = 8;
-}
-void APlayerCharacter::StunAffliction()
-{
-	affliction = 9;
-}
-void APlayerCharacter::TerrorAffliction()
-{
-	affliction = 10;
 }
 
 
@@ -469,6 +386,7 @@ void APlayerCharacter::StaminaRecharge(int partyMembersActive)
 	if (_stamina > _maxStamina)
 		_stamina = _maxStamina;
 }
+
 
 /*
 	Takes no arguments.
