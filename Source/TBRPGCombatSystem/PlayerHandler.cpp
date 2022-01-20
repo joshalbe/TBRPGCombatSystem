@@ -155,9 +155,9 @@ void UPlayerHandler::DealDamage(UPlayerHandler* target, int movePower, char isMe
 
 /*
 	Takes 1 argument:
-	oncomingDamage- the amount of damage the PlayerCharacter is about to take
+	oncomingDamage- the amount of damage the PlayerHandler is about to take
 
-	The function will take the damage and apply it to the PlayerCharacter's health, rendering them
+	The function will take the damage and apply it to the PlayerHandler's health, rendering them
 	unable to fight if their health reaches 0
 */
 void UPlayerHandler::TakeDamage(int oncomingDamage)
