@@ -59,6 +59,7 @@ public:
 
 	void AfterBattle();
 	
+	// Not necessary for use //
 	//Applies an affliction to the PlayerCharacter
 	void CorruptedAffliction() { affliction = 1; }
 	void FlashburnAffliction() { affliction = 2; }
@@ -70,6 +71,7 @@ public:
 	void FracturedAffliction() { affliction = 8; }
 	void SleepAffliction() { affliction = 9; }
 	void AnnoyedAffliction() { affliction = 10; }
+	// Not necessary for use //
 	
 
 private:
