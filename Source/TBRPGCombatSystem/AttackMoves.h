@@ -29,7 +29,6 @@ public:
 public:
 	int GetPower() { return _movePower; }
 	int GetStamCost() {	return _staminaCost; }
-	int GetMoveTypee() { return _moveTyp; }
 	UElementalType* GetMoveType() { return _moveType; }
 	char GetAttackKind() { return _attackKind; }
 
@@ -37,7 +36,6 @@ public:
 private:
 	int _movePower;
 	int _staminaCost;
-	int _moveTyp;
 	UElementalType* _moveType;
 	char _attackKind;
 };
