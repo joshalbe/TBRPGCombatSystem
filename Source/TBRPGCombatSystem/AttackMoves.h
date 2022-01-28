@@ -34,8 +34,10 @@ public:
 
 
 private:
+	UPROPERTY(EditAnywhere)
 	int _movePower;
 	int _staminaCost;
+	UPROPERTY(EditAnywhere)
 	UElementalType* _moveType;
-	char _attackKind;
+	char _attackKind = 'm';
 };

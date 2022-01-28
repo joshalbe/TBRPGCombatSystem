@@ -30,6 +30,10 @@ public:
 public:
 	// Return the base stats for use in operations
 	int GetLevel() { return _level; }
+	UFUNCTION(BlueprintCallable)
+	int GetHP() { return _health; }
+	UFUNCTION(BlueprintCallable)
+	int GetMaxHP() { return _maxHealth; }
 	int GetMAttack() { return _battleMAttack; }
 	int GetRAttack() { return _battleRAttack; }
 	int GetMDefense() { return _battleMDefense; }
@@ -46,11 +50,13 @@ public:
 	void AddExp(int expGain) { _exp += expGain; }
 	void DealDamage(UPlayerHandler* target, int movePower, char isMeleeAttack,
 		bool isSTAB, int effectiveness);
+	UFUNCTION(BlueprintCallable)
 	void TakeDamage(int oncomingDamage);
 	void StatChange(int statStage, int statChanged, int statChangedInBattle, int amountChanged);
 	void ResetStats();
 
 	//Specific functions for before a move takes effect
+	UFUNCTION(BlueprintCallable)
 	void UseMove(UAttackMoves* attackMove, UPlayerHandler* target);
 	int TypeCheck(UAttackMoves* move, UPlayerHandler* target);
 
@@ -77,6 +83,7 @@ private:
 	void LevelUp(int levelsGained);
 	void StaminaRecharge(int partyMembersActive);
 	void StaminaPenalty();
+	UFUNCTION(BlueprintCallable)
 	void DetermineStats();
 	void StatusCheck();
 

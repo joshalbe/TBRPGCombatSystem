@@ -254,9 +254,12 @@ void UPlayerHandler::UseMove(UAttackMoves* attackMove, UPlayerHandler* target)
 {
 	bool isSTAB = false;
 
-	if (typeCombo[0] == attackMove->GetMoveType() || typeCombo[1] == attackMove->GetMoveType())
+	if (typeCombo[0] && typeCombo[1] && attackMove->GetMoveType())
 	{
-		isSTAB = true;
+		if (typeCombo[0] == attackMove->GetMoveType() || typeCombo[1] == attackMove->GetMoveType())
+		{
+			isSTAB = true;
+		}
 	}
 
 	int effectiveness = TypeCheck(attackMove, target);
