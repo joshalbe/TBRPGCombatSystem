@@ -8,4 +8,6 @@ A modular system that can be implemented into an RPG for combat. Includes severa
 - Leveling modifiers
 - Elemental Types
 
+To implement into a build, simply restart the build with the files in the project.
+
 **CURRENTLY UNFINISHED**
